@@ -1,0 +1,29 @@
+const uuid = require('uuid');
+const dynamodb = require('../libs/dynamo');
+const { success, failure } = require('../libs/response');
+
+module.exports.create = async event => {
+  const timestamp = new Date().getTime();
+  const data = JSON.parse(event.body);
+
+  const params = {
+    TableName: process.env.TABLE_NAME,
+    Item: {
+      //TODO: change to use logged in userid
+      PK: data.userid,
+      SK: uuid.v4(),
+      title: data.title,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    },
+  };
+
+  try {
+    await dynamodb.call('put', params);
+    console.log('Success');
+    return success(params.Item);
+  } catch (err) {
+    console.error(`Failure: ${err.message}`);
+    return failure({ message: 'Error occurred while creating pain entry.' });
+  }
+};
