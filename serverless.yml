@@ -36,6 +36,17 @@ functions:
           path: games
           method: post
           cors: true
+
+  search-game:
+    handler: game/search.search
+    environment:
+      GB_URL: 'https://giantbomb.com/api/games'
+      GB_API_KEY: ${ssm:/focus-gb-key~true}
+    events:
+      - http:
+          path: search
+          method: get
+          cors: true
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -88,6 +99,6 @@ functions:
 #       Description: "Description for the output"
 #       Value: "Some output value"
 
-resource:
+resources:
   - ${file(resources/gateway-errors.yml)}
   - ${file(resources/dynamo.yml)}

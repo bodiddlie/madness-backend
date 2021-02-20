@@ -2,7 +2,7 @@ const uuid = require('uuid');
 const dynamodb = require('../libs/dynamo');
 const { success, failure } = require('../libs/response');
 
-module.exports.create = async event => {
+module.exports.add = async event => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
 
