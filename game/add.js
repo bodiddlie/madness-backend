@@ -1,4 +1,3 @@
-const uuid = require('uuid');
 const dynamodb = require('../libs/dynamo');
 const { success, failure } = require('../libs/response');
 
@@ -10,8 +9,8 @@ module.exports.add = async event => {
     TableName: process.env.TABLE_NAME,
     Item: {
       //TODO: change to use logged in userid
-      PK: data.userid,
-      SK: uuid.v4(),
+      PK: 'user',
+      SK: data.title,
       title: data.title,
       createdAt: timestamp,
       updatedAt: timestamp,

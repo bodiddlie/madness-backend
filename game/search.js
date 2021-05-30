@@ -1,4 +1,3 @@
-const https = require('https');
 const {success, failure} = require('../libs/response');
 const axios = require('axios');
 
@@ -13,7 +12,7 @@ module.exports.search = async event => {
     const games = result.data.results.map(g => {
       return {
         name: g.name,
-        description: g.description,
+        description: g.deck,
         image: g.image.screen_url
       };
     });
