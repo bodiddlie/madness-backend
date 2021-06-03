@@ -11,10 +11,11 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   lambdaHashingVersion: 20201221
   environment:
     TABLE_NAME: ${self:service}-${self:custom.stage}
+    USER_TABLE_NAME: ${self:service}-${self:custom.stage}-user
   stage: dev
   region: us-east-1
   iamRoleStatements:
@@ -27,8 +28,27 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TABLE_NAME}'
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USER_TABLE_NAME}'
 
 functions:
+  sign-up:
+    handler: auth/signup.signup
+    environment:
+      SECRET_KEY: ${ssm:/focus-encryption-key~true}
+    events:
+      - http:
+          path: signup
+          method: post
+          cors: true
+
   add-game:
     handler: game/add.add
     events:
