@@ -6,6 +6,10 @@ function failure(body) {
   return buildResponse(500, body);
 }
 
+function unauthorized(body) {
+  return buildResponse(401, body);
+}
+
 function buildResponse(statusCode, body) {
   return {
     statusCode,
@@ -20,4 +24,5 @@ function buildResponse(statusCode, body) {
 module.exports = {
   success,
   failure,
+  unauthorized,
 };

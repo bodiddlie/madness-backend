@@ -15,7 +15,6 @@ provider:
   lambdaHashingVersion: 20201221
   environment:
     TABLE_NAME: ${self:service}-${self:custom.stage}
-    USER_TABLE_NAME: ${self:service}-${self:custom.stage}-user
   stage: dev
   region: us-east-1
   iamRoleStatements:
@@ -27,16 +26,10 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TABLE_NAME}'
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USER_TABLE_NAME}'
+        - ses:SendEmail
+      Resource:
+        - 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TABLE_NAME}'
+        - 'arn:aws:ses:${opt:region, self:provider.region}:*:*'
 
 functions:
   sign-up:
@@ -46,6 +39,17 @@ functions:
     events:
       - http:
           path: signup
+          method: post
+          cors: true
+
+  login:
+    handler: auth/login.login
+    environment:
+      SECRET_KEY: ${ssm:/focus-encryption-key~true}
+      JWT_SECRET: ${ssm:/focus-jwt-key~true}
+    events:
+      - http:
+          path: login
           method: post
           cors: true
 

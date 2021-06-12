@@ -1,14 +1,14 @@
 const dynamodb = require('../libs/dynamo');
 const { success, failure } = require('../libs/response');
 
-module.exports.add = async event => {
+module.exports.add = async (event) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
 
   const params = {
     TableName: process.env.TABLE_NAME,
     Item: {
-      //TODO: change to use logged in userid
+      // TODO: change to use logged in userid
       PK: 'user',
       SK: data.title,
       title: data.title,
