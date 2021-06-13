@@ -1,6 +1,7 @@
 const { success, failure } = require('../libs/response');
 const { encrypt } = require('../libs/crypto');
 const aws = require('aws-sdk');
+
 const ses = new aws.SES({ region: 'us-east-1' });
 
 const linkExpirationTime = 1000 * 60 * 30;

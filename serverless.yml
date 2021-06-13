@@ -15,6 +15,7 @@ provider:
   lambdaHashingVersion: 20201221
   environment:
     TABLE_NAME: ${self:service}-${self:custom.stage}
+    JWT_SECRET: ${ssm:/focus-jwt-key~true}
   stage: dev
   region: us-east-1
   iamRoleStatements:
@@ -46,7 +47,6 @@ functions:
     handler: auth/login.login
     environment:
       SECRET_KEY: ${ssm:/focus-encryption-key~true}
-      JWT_SECRET: ${ssm:/focus-jwt-key~true}
     events:
       - http:
           path: login

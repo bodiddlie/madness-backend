@@ -1,7 +1,15 @@
 const dynamodb = require('../libs/dynamo');
-const { success, failure } = require('../libs/response');
+const { success, failure, unauthorized } = require('../libs/response');
+const auth = require('../libs/auth');
 
 module.exports.add = async (event) => {
+  const authHeader = event.headers.Authorization;
+  const token = authHeader.split(' ')[1];
+
+  if (!auth(token)) {
+    return unauthorized();
+  }
+
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
 

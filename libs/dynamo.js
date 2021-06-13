@@ -6,6 +6,14 @@ function call(action, params) {
   return dynamodb[action](params).promise();
 }
 
+function buildParams() {
+  const params = {
+    TableName: process.env.TABLE_NAME,
+  };
+  return params;
+}
+
 module.exports = {
   call,
+  buildParams,
 };

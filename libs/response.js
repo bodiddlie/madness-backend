@@ -6,8 +6,8 @@ function failure(body) {
   return buildResponse(500, body);
 }
 
-function unauthorized(body) {
-  return buildResponse(401, body);
+function unauthorized() {
+  return buildResponse(401, { message: 'Unauthorized to access resource.' });
 }
 
 function buildResponse(statusCode, body) {
