@@ -1,10 +1,12 @@
-const { success, failure } = require('../libs/response');
 const axios = require('axios');
+
+const { success, failure } = require('../libs/response');
+const auth = require('../libs/auth');
 
 const gbUrl = process.env.GB_URL;
 const apiKey = process.env.GB_API_KEY;
 
-module.exports.search = async (event) => {
+module.exports.search = auth()(async (event) => {
   const url = `${gbUrl}?api_key=${apiKey}&format=json&filter=name:${event.queryStringParameters.name}`;
 
   try {
@@ -21,4 +23,4 @@ module.exports.search = async (event) => {
     console.error(`Failed to search GB for games: ${err.message}`);
     return failure({ message: 'Error while searching for games.' });
   }
-};
+});

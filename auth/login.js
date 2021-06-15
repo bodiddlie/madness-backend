@@ -1,5 +1,5 @@
 const { success, unauthorized } = require('../libs/response');
-const dynamodb = require('../libs/dynamo');
+const { getUser, saveUser, saveUserSession } = require('../libs/fetch-user');
 const { decrypt } = require('../libs/crypto');
 const jwt = require('jsonwebtoken');
 const cuid = require('cuid');
@@ -52,53 +52,3 @@ module.exports.login = async (event) => {
     return unauthorized({ message: err.message });
   }
 };
-
-async function getUser(email) {
-  const params = {
-    TableName: process.env.TABLE_NAME,
-    Key: {
-      PK: `USER#${email}`,
-      SK: `PROFILE#${email}`,
-    },
-  };
-
-  try {
-    const result = await dynamodb.call('get', params);
-    return result.Item;
-  } catch {
-    return null;
-  }
-}
-
-async function saveUser(email) {
-  console.log(email);
-  const timestamp = new Date().toISOString();
-  const params = {
-    TableName: process.env.TABLE_NAME,
-    Item: {
-      PK: `USER#${email}`,
-      SK: `PROFILE#${email}`,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    },
-  };
-
-  await dynamodb.call('put', params);
-  return params.Item;
-}
-
-async function saveUserSession(email, sessionId) {
-  const timestamp = new Date().toISOString();
-  const params = {
-    TableName: process.env.TABLE_NAME,
-    Item: {
-      PK: `USER#${email}`,
-      SK: `SESSION#${sessionId}`,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    },
-  };
-
-  await dynamodb.call('put', params);
-  return;
-}

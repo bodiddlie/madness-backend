@@ -1,23 +1,23 @@
 const dynamodb = require('../libs/dynamo');
-const { success, failure, unauthorized } = require('../libs/response');
+const { success, failure } = require('../libs/response');
 const auth = require('../libs/auth');
 
-module.exports.add = async (event) => {
-  const authHeader = event.headers.Authorization;
-  const token = authHeader.split(' ')[1];
-
-  if (!auth(token)) {
-    return unauthorized();
-  }
-
+module.exports.add = auth()(async (event) => {
+  let data;
   const timestamp = new Date().getTime();
-  const data = JSON.parse(event.body);
+  try {
+    data = JSON.parse(event.body);
+  } catch (err) {
+    console.log(`Error while parsing body: ${err.message}`);
+    return failure({ message: 'Error while parsing request body.' });
+  }
+  const { userEmail } = event;
 
   const params = {
     TableName: process.env.TABLE_NAME,
     Item: {
       // TODO: change to use logged in userid
-      PK: 'user',
+      PK: `USER#${userEmail}`,
       SK: data.title,
       title: data.title,
       createdAt: timestamp,
@@ -33,4 +33,4 @@ module.exports.add = async (event) => {
     console.error(`Failure: ${err.message}`);
     return failure({ message: 'Error occurred while creating pain entry.' });
   }
-};
+});
