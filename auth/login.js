@@ -46,7 +46,7 @@ module.exports.login = async (event) => {
     await saveUserSession(email, sessionId);
 
     // return jwt
-    return success({ token });
+    return success({ email, token });
   } catch (err) {
     console.error(err.message);
     return unauthorized({ message: err.message });
