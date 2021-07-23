@@ -13,6 +13,7 @@ module.exports.search = auth()(async (event) => {
     const result = await axios.get(url);
     const games = result.data.results.map((g) => {
       return {
+        id: g.id,
         name: g.name,
         description: g.deck,
         image: g.image.screen_url,
