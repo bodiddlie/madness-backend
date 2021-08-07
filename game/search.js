@@ -16,7 +16,7 @@ module.exports.search = auth()(async (event) => {
         id: g.id,
         name: g.name,
         description: g.deck,
-        image: g.image.screen_url,
+        image: g.image.original_url,
       };
     });
     return success({ games });
