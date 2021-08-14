@@ -6,8 +6,7 @@ const ses = new aws.SES({ region: 'us-east-1' });
 
 const linkExpirationTime = 1000 * 60 * 30;
 
-const link =
-  'http://focus-madness-client-dev.s3-website-us-east-1.amazonaws.com/';
+const link = 'https://pileofshame.klepinger.dev/magic-link';
 
 module.exports.signup = async (event) => {
   const data = JSON.parse(event.body);
