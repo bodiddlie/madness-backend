@@ -13,15 +13,19 @@ module.exports.add = auth()(async (event) => {
   }
   const { userEmail } = event;
 
+  const listLength = await getGameCount(userEmail);
+
   const params = {
     TableName: process.env.TABLE_NAME,
     Item: {
-      // TODO: change to use logged in userid
       PK: `USER#${userEmail}`,
-      SK: data.title,
-      title: data.title,
+      SK: `GAME#${data.title}`,
       createdAt: timestamp,
       updatedAt: timestamp,
+      title: data.title,
+      completed: false,
+      sortOrder: listLength + 1,
+      boxArt: data.boxArt,
     },
   };
 
@@ -34,3 +38,22 @@ module.exports.add = auth()(async (event) => {
     return failure({ message: 'Error occurred while creating pain entry.' });
   }
 });
+
+async function getGameCount(email) {
+  const params = {
+    TableName: process.env.TABLE_NAME,
+    KeyConditionExpression: 'PK = :userId and begins_with(SK, :game)',
+    ExpressionAttributeValues: {
+      ':userId': `USER#${email}`,
+      ':game': 'GAME#',
+    },
+  };
+
+  try {
+    const result = await dynamodb.call('query', params);
+    return result.Items.length;
+  } catch (err) {
+    console.error(`Error while querying for list length: ${err.message}`);
+    return 0;
+  }
+}
