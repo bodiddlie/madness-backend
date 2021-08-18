@@ -53,6 +53,14 @@ functions:
           method: post
           cors: true
 
+  get-game:
+    handler: game/get.get
+    events:
+      - http:
+          path: games
+          method: get
+          cors: true
+
   add-game:
     handler: game/add.add
     events:
