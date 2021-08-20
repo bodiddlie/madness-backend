@@ -19,7 +19,8 @@ module.exports.add = auth()(async (event) => {
     TableName: process.env.TABLE_NAME,
     Item: {
       PK: `USER#${userEmail}`,
-      SK: `GAME#${data.title}`,
+      SK: `GAME#${data.id}`,
+      id: data.id,
       createdAt: timestamp,
       updatedAt: timestamp,
       title: data.title,
