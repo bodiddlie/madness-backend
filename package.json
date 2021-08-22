@@ -12,13 +12,5 @@
     "eslint": "^7.27.0",
     "eslint-plugin-import": "^2.23.4",
     "prettier": "^2.3.0"
-  },
-  "eslintConfig": {
-    "extends": "@serverless/eslint-config/node",
-    "root": true,
-    "rules": {
-      "no-console": "off",
-      "strict": "off"
-    }
   }
 }

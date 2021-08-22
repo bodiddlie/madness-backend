@@ -69,6 +69,14 @@ functions:
           method: post
           cors: true
 
+  remove-game:
+    handler: game/remove.remove
+    events:
+      - http:
+          path: games/{id}
+          method: delete
+          cors: true
+
   search-game:
     handler: game/search.search
     environment:

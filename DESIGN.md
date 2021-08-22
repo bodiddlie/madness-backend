@@ -8,6 +8,7 @@
 | login         | POST   | `/{env}/login`              | Validates a magic link token, generates a JWT and sends to client |
 | search        | GET    | `/{env}/search?name={name}` | Searches for games with given name and returns a list             |
 | add           | POST   | `/{env}/games`              | Adds a game to the pile of shame                                  |
+| remove        | DELETE | `/{env}/games/{gameId}`     | Removes a game from the pile of shame                             |
 | get games     | GET    | `/{env}/games`              | Retrieves all games on the pile of shame for a user               |
 | complete game | PATCH  | `/{env}/games/{gamdId}`     | Marks a game as complete                                          |
 | update sort   | PATCH  | `/{env}/games/`             | Takes a list of games and updates the sort order for each one     |

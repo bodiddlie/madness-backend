@@ -27,13 +27,15 @@ module.exports.add = auth()(async (event) => {
       completed: false,
       sortOrder: listLength + 1,
       boxArt: data.boxArt,
+      description: data.description,
     },
   };
 
   try {
     await dynamodb.call('put', params);
     console.log('Success');
-    return success(params.Item);
+    const { PK, SK, createdAt, updateAt, ...game } = params.Item;
+    return success(game);
   } catch (err) {
     console.error(`Failure: ${err.message}`);
     return failure({ message: 'Error occurred while creating pain entry.' });

@@ -14,9 +14,9 @@ module.exports.search = auth()(async (event) => {
     const games = result.data.results.map((g) => {
       return {
         id: g.id,
-        name: g.name,
+        title: g.name,
         description: g.deck,
-        image: g.image.original_url,
+        boxArt: g.image.original_url,
       };
     });
     return success({ games });
