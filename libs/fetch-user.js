@@ -27,6 +27,7 @@ async function saveUser(email) {
       SK: `PROFILE#${email}`,
       createdAt: timestamp,
       updatedAt: timestamp,
+      isSorted: false,
     },
   };
 

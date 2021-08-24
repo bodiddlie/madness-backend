@@ -53,6 +53,22 @@ functions:
           method: post
           cors: true
 
+  profile:
+    handler: auth/profile.profile
+    events:
+      - http:
+          path: profile
+          method: get
+          cors: true
+
+  top-game:
+    handler: game/top.top
+    events:
+      - http:
+          path: topgame
+          method: get
+          cors: true
+
   get-game:
     handler: game/get.get
     events:
