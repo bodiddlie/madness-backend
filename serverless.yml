@@ -85,6 +85,14 @@ functions:
           method: post
           cors: true
 
+  complete-game:
+    handler: game/complete.complete
+    events:
+      - http:
+          path: games/{id}
+          method: patch
+          cors: true
+
   remove-game:
     handler: game/remove.remove
     events:
