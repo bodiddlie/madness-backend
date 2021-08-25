@@ -6,7 +6,7 @@ const ses = new aws.SES({ region: 'us-east-1' });
 
 const linkExpirationTime = 1000 * 60 * 30;
 
-const link = 'https://pileofshame.klepinger.dev/magic-link';
+const link = 'https://pileofshame.klepinger.dev';
 
 module.exports.signup = async (event) => {
   const data = JSON.parse(event.body);
