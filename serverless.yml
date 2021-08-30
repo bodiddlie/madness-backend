@@ -101,6 +101,14 @@ functions:
           method: delete
           cors: true
 
+  sort-games:
+    handler: game/sort.sort
+    events:
+      - http:
+          path: games/sort
+          method: put
+          cors: true
+
   search-game:
     handler: game/search.search
     environment:

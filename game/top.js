@@ -16,7 +16,11 @@ module.exports.top = auth()(async (event) => {
 
   try {
     const result = await dynamodb.call('query', params);
-    return success(result.Items.sort((a, b) => a.sortOrder - b.sortOrder)[0]);
+    const array = [...result.Items];
+    console.log(array);
+    array.sort((a, b) => a.sortOrder - b.sortOrder);
+    console.log(array);
+    return success(array[0]);
   } catch (err) {
     console.error(`Error while querying for top game: ${err.message}`);
     return failure({ message: 'Error while querying top game.' });
