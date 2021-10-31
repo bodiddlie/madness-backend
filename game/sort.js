@@ -31,7 +31,7 @@ module.exports.sort = auth()(async (event) => {
       await dynamodb.call('update', params);
     } catch (err) {
       console.error(
-        `Failure to update sort order for game: ${g.id}: ${err.message}`
+        `Failure to update sort order for game: ${g.id}: ${err.message}`,
       );
       failedIds.push(g.id);
     }
@@ -40,7 +40,7 @@ module.exports.sort = auth()(async (event) => {
   if (failedIds.length > 0) {
     return failure({
       message: `Error occurred while updating sort order for games ${failedIds.join(
-        ','
+        ',',
       )}`,
     });
   }

@@ -8,9 +8,11 @@ module.exports.get = auth()(async (event) => {
   const params = {
     TableName: process.env.TABLE_NAME,
     KeyConditionExpression: 'PK = :userId and begins_with(SK, :game)',
+    FilterExpression: 'completed = :completed',
     ExpressionAttributeValues: {
       ':userId': `USER#${userEmail}`,
       ':game': 'GAME#',
+      ':completed': false,
     },
   };
 
