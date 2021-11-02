@@ -1,5 +1,5 @@
 const dynamodb = require('../libs/dynamo');
-const { success, failure } = require('../libs/response');
+const { success, badRequest, failure } = require('../libs/response');
 const auth = require('../libs/auth');
 
 module.exports.sort = auth()(async (event) => {
@@ -8,7 +8,7 @@ module.exports.sort = auth()(async (event) => {
     data = JSON.parse(event.body);
   } catch (err) {
     console.log(`Error while parsing body: ${err.message}`);
-    return failure({ message: 'Error while parsing request body' });
+    return badRequest('Error while parsing request body');
   }
 
   const failedIds = [];

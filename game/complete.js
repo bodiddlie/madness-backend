@@ -13,7 +13,7 @@ module.exports.complete = auth()(async (event) => {
     ExpressionAttributeValues: {
       ':completed': true,
     },
-    ReturnvValues: 'ALL_NEW',
+    ReturnValues: 'ALL_NEW',
   };
 
   try {
@@ -21,7 +21,7 @@ module.exports.complete = auth()(async (event) => {
     return success();
   } catch (err) {
     console.error(
-      `Failure while completing game ${event.pathParameters.id}: ${err}`
+      `Failure while completing game ${event.pathParameters.id}: ${err}`,
     );
     return failure({ message: 'Error occurred while completing game.' });
   }

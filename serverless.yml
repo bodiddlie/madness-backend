@@ -8,6 +8,10 @@ frameworkVersion: '2'
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  ui:
+    address:
+      local: http://localhost:3000
+      dev: https://pileofshame.klepinger.dev
 
 provider:
   name: aws
@@ -37,6 +41,7 @@ functions:
     handler: auth/signup.signup
     environment:
       SECRET_KEY: ${ssm:/focus-encryption-key~true}
+      ADDRESS: ${self:custom.ui.address.${self:provider.stage}}
     events:
       - http:
           path: signup

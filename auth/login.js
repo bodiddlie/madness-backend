@@ -7,48 +7,50 @@ const cuid = require('cuid');
 const tokenExpirationTime = 60 * 60 * 24 * 30;
 
 module.exports.login = async (event) => {
+  const data = JSON.parse(event.body);
+  const { magicLink } = data;
+
+  let decryptedMagicLink;
   try {
-    const data = JSON.parse(event.body);
-    const { magicLink } = data;
-    console.log(magicLink);
-    const decryptedMagicLink = JSON.parse(decrypt(magicLink));
-    console.log(decryptedMagicLink);
-    const [email, linkExpiration] = decryptedMagicLink;
-
-    console.log(`Email: ${email}`);
-    if (!email || !linkExpiration) {
-      throw new Error('Invalid magic link.');
-    }
-
-    const linkExpirationDate = new Date(linkExpiration);
-    if (Date.now() > linkExpirationDate.getTime()) {
-      throw new Error('Magic link expired. Please request a new one.');
-    }
-
-    const user = await getUser(email);
-
-    if (!user) {
-      await saveUser(email);
-    }
-
-    // generate jwt
-    const sessionId = cuid();
-
-    const tokenBody = {
-      sessionId,
-      email,
-    };
-
-    const token = jwt.sign(tokenBody, process.env.JWT_SECRET, {
-      expiresIn: tokenExpirationTime,
-    });
-
-    await saveUserSession(email, sessionId);
-
-    // return jwt
-    return success({ email, token });
-  } catch (err) {
-    console.error(err.message);
-    return unauthorized({ message: err.message });
+    decryptedMagicLink = JSON.parse(decrypt(magicLink));
+  } catch (error) {
+    console.warn('Error decrypting magic link.');
+    return unauthorized();
   }
+
+  const [email, linkExpiration] = decryptedMagicLink;
+
+  if (!email || !linkExpiration) {
+    console.warn('Invlaid magic link.');
+    return unauthorized();
+  }
+
+  const linkExpirationDate = new Date(linkExpiration);
+  if (Date.now() > linkExpirationDate.getTime()) {
+    console.warn('Magic link expired.');
+    return unauthorized();
+  }
+
+  const user = await getUser(email);
+
+  if (!user) {
+    await saveUser(email);
+  }
+
+  // generate jwt
+  const sessionId = cuid();
+
+  const tokenBody = {
+    sessionId,
+    email,
+  };
+
+  const token = jwt.sign(tokenBody, process.env.JWT_SECRET, {
+    expiresIn: tokenExpirationTime,
+  });
+
+  await saveUserSession(email, sessionId);
+
+  // return jwt
+  return success({ email, token });
 };

@@ -1,5 +1,5 @@
 const dynamodb = require('../libs/dynamo');
-const { success, failure } = require('../libs/response');
+const { success, badRequest, failure } = require('../libs/response');
 const auth = require('../libs/auth');
 
 module.exports.add = auth()(async (event) => {
@@ -8,8 +8,9 @@ module.exports.add = auth()(async (event) => {
   try {
     data = JSON.parse(event.body);
   } catch (err) {
-    console.log(`Error while parsing body: ${err.message}`);
-    return failure({ message: 'Error while parsing request body.' });
+    const message = `Error while parsing body: ${err.message}`;
+    console.log(message);
+    return badRequest(message);
   }
   const { userEmail } = event;
 
@@ -33,7 +34,6 @@ module.exports.add = auth()(async (event) => {
 
   try {
     await dynamodb.call('put', params);
-    console.log('Success');
     const { PK, SK, createdAt, updateAt, ...game } = params.Item;
     return success(game);
   } catch (err) {

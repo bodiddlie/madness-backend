@@ -48,7 +48,6 @@ async function saveUserSession(email, sessionId) {
   };
 
   await dynamodb.call('put', params);
-  return;
 }
 
 async function getUserSession(email, sessionId) {

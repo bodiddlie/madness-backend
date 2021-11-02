@@ -6,14 +6,12 @@ const ses = new aws.SES({ region: 'us-east-1' });
 
 const linkExpirationTime = 1000 * 60 * 30;
 
-const link = 'https://pileofshame.klepinger.dev';
-
 module.exports.signup = async (event) => {
   const data = JSON.parse(event.body);
   const { email } = data;
   try {
     const expirationDateTime = new Date(
-      Date.now() + linkExpirationTime
+      Date.now() + linkExpirationTime,
     ).toISOString();
     const stringToEncrypt = JSON.stringify([email, expirationDateTime]);
     const encryptedString = encrypt(stringToEncrypt);
@@ -32,7 +30,9 @@ async function sendEmail(magicLink, email) {
     },
     Message: {
       Body: {
-        Text: { Data: `Visit ${link}?magicLink=${magicLink} to login.` },
+        Text: {
+          Data: `Visit ${process.env.ADDRESS}?magicLink=${magicLink} to login.`,
+        },
       },
       Subject: {
         Data: 'Magic Link Login for Focus Madness',
