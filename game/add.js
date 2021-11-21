@@ -34,7 +34,7 @@ module.exports.add = auth()(async (event) => {
 
   try {
     await dynamodb.call('put', params);
-    const { PK, SK, createdAt, updateAt, ...game } = params.Item;
+    const { PK, SK, createdAt, updatedAt, ...game } = params.Item;
     return success(game);
   } catch (err) {
     console.error(`Failure: ${err.message}`);
