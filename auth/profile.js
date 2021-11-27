@@ -8,5 +8,6 @@ module.exports.profile = auth()(async (event) => {
   if (!user) {
     return notFound();
   }
+  console.log(user);
   return success({ email: event.userEmail, isSorted: user.isSorted });
 });

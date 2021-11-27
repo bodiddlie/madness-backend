@@ -8,7 +8,7 @@ const linkExpirationTime = 1000 * 60 * 30;
 
 module.exports.signup = async (event) => {
   const data = JSON.parse(event.body);
-  const { email } = data;
+  const email = data.email.trim();
   try {
     const expirationDateTime = new Date(
       Date.now() + linkExpirationTime,
@@ -30,15 +30,18 @@ async function sendEmail(magicLink, email) {
     },
     Message: {
       Body: {
-        Text: {
-          Data: `Visit ${process.env.ADDRESS}?magicLink=${magicLink} to login.`,
+        Html: {
+          Charset: 'UTF-8',
+          Data: `<p>Hi ${email}! Here's the magic link you requested to access the Pile of Shame app.</p>
+<p><a href="${process.env.ADDRESS}?magicLink=${magicLink}">Click here to login</a></p>
+<p><i>You received this email because your email address was used to sign up for an account at <a href="${process.env.ADDRESS}">pileofhsame.klepinger.dev</a>. If you didn't sign up for an account, feel free to disregard and delete this email.</i></p>`,
         },
       },
       Subject: {
-        Data: 'Magic Link Login for Focus Madness',
+        Data: 'Magic Link Login for Pile of Shame',
       },
     },
-    Source: 'test@klepinger.dev',
+    Source: 'noreply@klepinger.dev',
   };
 
   try {

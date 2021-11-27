@@ -21,7 +21,7 @@ module.exports.login = async (event) => {
   const [email, linkExpiration] = decryptedMagicLink;
 
   if (!email || !linkExpiration) {
-    console.warn('Invlaid magic link.');
+    console.warn('Invalid magic link.');
     return unauthorized();
   }
 
